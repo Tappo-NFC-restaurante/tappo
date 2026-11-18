@@ -324,21 +324,41 @@ export const AdminDashboard: React.FC = () => {
               <div className="p-4 bg-white rounded-2xl">
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-                    `http://localhost:3001/m/${selectedQrTable.nfc_token}`
+                    `${typeof window !== 'undefined' ? window.location.origin : ''}/m/${selectedQrTable.nfc_token}`
                   )}`}
                   alt="QR Code"
                   className="w-44 h-44"
                 />
               </div>
-              <span className="font-mono text-xs text-tappo-red font-bold">
-                Token: {selectedQrTable.nfc_token}
-              </span>
-              <button
-                onClick={() => setSelectedQrTable(null)}
-                className="w-full py-2.5 rounded-xl bg-white text-black font-bold text-xs"
-              >
-                Fechar
-              </button>
+
+              <div className="w-full flex flex-col gap-1">
+                <span className="font-mono text-xs text-tappo-red font-bold">
+                  Token: {selectedQrTable.nfc_token}
+                </span>
+                <span className="font-mono text-[11px] text-zinc-400 truncate bg-zinc-900 p-2 rounded-lg border border-zinc-800">
+                  {typeof window !== 'undefined' ? `${window.location.origin}/m/${selectedQrTable.nfc_token}` : ''}
+                </span>
+              </div>
+
+              <div className="w-full flex gap-2">
+                <button
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      navigator.clipboard.writeText(`${window.location.origin}/m/${selectedQrTable.nfc_token}`);
+                      alert('URL copiada para o gravador NFC!');
+                    }
+                  }}
+                  className="flex-1 py-2.5 rounded-xl bg-tappo-red hover:bg-tappo-red-hover text-white font-bold text-xs"
+                >
+                  Copiar Link NFC
+                </button>
+                <button
+                  onClick={() => setSelectedQrTable(null)}
+                  className="py-2.5 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs"
+                >
+                  Fechar
+                </button>
+              </div>
             </div>
           </div>
         )}

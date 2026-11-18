@@ -394,27 +394,27 @@ export const CustomerMenu: React.FC = () => {
         </main>
 
         {/* =========================================================================
-            5. BARRA INFERIOR BRANCA SÓLIDA COM BOTÃO VERMELHO 'PEDIR A CONTA'
+            5. BARRA INFERIOR VERMELHA SÓLIDA COM BOTÕES BRANCOS
            ========================================================================= */}
-        <footer className="fixed bottom-0 inset-x-0 z-40 bg-white rounded-t-3xl shadow-2xl p-4 px-6 border-t border-zinc-200">
-          <div className="max-w-md mx-auto flex items-center justify-between gap-4">
+        <footer className="fixed bottom-0 inset-x-0 z-40 bg-tappo-red rounded-t-3xl shadow-2xl p-4 px-6 border-t border-red-700/60">
+          <div className="max-w-md mx-auto flex items-center justify-between gap-3">
             {/* Chamar Garçom */}
             <button
               onClick={() => setIsWaiterDrawerOpen(true)}
-              className="flex items-center gap-2 py-3 px-4 rounded-2xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-xs font-bold transition active:scale-95"
+              className="flex items-center gap-2 py-3.5 px-4 rounded-2xl bg-white hover:bg-zinc-100 text-zinc-900 text-xs font-bold transition active:scale-95 shadow-md"
             >
               <Bell size={16} className="text-tappo-red" />
               <span>Chamar Garçom</span>
             </button>
 
-            {/* Pedir a Conta (Botão Vermelho iFood) */}
+            {/* Pedir a Conta */}
             <button
               onClick={() => setIsBillDrawerOpen(true)}
-              className="flex-1 py-3.5 px-6 rounded-2xl bg-tappo-red hover:bg-tappo-red-hover text-white text-sm font-black text-center shadow-solid-red transition active:scale-95 flex items-center justify-center gap-2"
+              className="flex-1 py-3.5 px-5 rounded-2xl bg-white hover:bg-zinc-100 text-tappo-red font-black text-sm text-center shadow-md transition active:scale-95 flex items-center justify-center gap-2"
             >
               <span>Pedir a conta</span>
               {totalCartCount > 0 && (
-                <span className="bg-white text-tappo-red px-2 py-0.5 rounded-full text-[11px] font-black">
+                <span className="bg-tappo-red text-white px-2 py-0.5 rounded-full text-[11px] font-black">
                   {totalCartCount}
                 </span>
               )}

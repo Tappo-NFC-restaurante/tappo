@@ -20,6 +20,18 @@ function getTenantId(req: Request): string {
   return req.user.tenantId;
 }
 
+function getBaseUrl(req: Request): string {
+  if (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) {
+    return process.env.BASE_URL;
+  }
+  const host = req.get('host');
+  const protocol =
+    req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https'
+      ? 'https'
+      : 'http';
+  return `${protocol}://${host}`;
+}
+
 /**
  * GET /api/restaurant/dashboard
  * Retorna os dados em tempo real do salão: mesas, pedidos pendentes, chamados
@@ -27,6 +39,7 @@ function getTenantId(req: Request): string {
 router.get('/dashboard', async (req: Request, res: Response) => {
   try {
     const tenantId = getTenantId(req);
+    const baseUrl = getBaseUrl(req);
 
     // 1. Busca todas as mesas do restaurante com sua sessão aberta atual (se houver)
     const tables = await prisma.table.findMany({
@@ -104,6 +117,7 @@ router.get('/dashboard', async (req: Request, res: Response) => {
         id: t.id,
         label: t.label,
         nfc_token: t.nfc_token,
+        nfc_url: `${baseUrl}/m/${t.nfc_token}`,
         active: t.active,
         hasActiveSession: Boolean(activeSession),
         activeSession: activeSession

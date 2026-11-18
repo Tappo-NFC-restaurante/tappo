@@ -142,7 +142,8 @@ export const TableNfcProvisioner: React.FC<TableNfcProvisionerProps> = ({
       {/* Lista de Mesas Provisionadas */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {tables.map((table) => {
-          const nfcUrl = table.nfc_url || `http://localhost:3001/m/${table.nfc_token}`;
+          const origin = typeof window !== 'undefined' ? window.location.origin : '';
+          const nfcUrl = `${origin}/m/${table.nfc_token}`;
           const isCopied = copiedToken === table.nfc_token;
 
           return (
@@ -237,7 +238,7 @@ export const TableNfcProvisioner: React.FC<TableNfcProvisionerProps> = ({
             <div className="p-4 bg-white rounded-2xl shadow-xl border-4 border-tappo-red">
               <img
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
-                  selectedQrTable.nfc_url || `http://localhost:3001/m/${selectedQrTable.nfc_token}`
+                  `${typeof window !== 'undefined' ? window.location.origin : ''}/m/${selectedQrTable.nfc_token}`
                 )}`}
                 alt="QR Code"
                 className="w-48 h-48"
@@ -245,7 +246,7 @@ export const TableNfcProvisioner: React.FC<TableNfcProvisionerProps> = ({
             </div>
 
             <div className="flex flex-col items-center">
-              <span className="font-mono font-bold text-sm text-tappo-secondary">
+              <span className="font-mono font-bold text-sm text-tappo-red">
                 Token: {selectedQrTable.nfc_token}
               </span>
               <span className="text-[11px] text-zinc-500 max-w-xs mt-1">

@@ -108,13 +108,25 @@ router.put('/tenants/:id', async (req: Request, res: Response) => {
   }
 });
 
+function getBaseUrl(req: Request): string {
+  if (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) {
+    return process.env.BASE_URL;
+  }
+  const host = req.get('host');
+  const protocol =
+    req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https'
+      ? 'https'
+      : 'http';
+  return `${protocol}://${host}`;
+}
+
 /**
  * GET /api/admin/tenants/:tenantId/tables
  * Lista todas as mesas de um restaurante com URLs e tokens para gravação NFC
  */
 router.get('/tenants/:tenantId/tables', async (req: Request, res: Response) => {
   const { tenantId } = req.params;
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
+  const baseUrl = getBaseUrl(req);
 
   try {
     const tables = await prisma.table.findMany({
@@ -140,7 +152,7 @@ router.get('/tenants/:tenantId/tables', async (req: Request, res: Response) => {
 router.post('/tenants/:tenantId/tables', async (req: Request, res: Response) => {
   const { tenantId } = req.params;
   const { label } = req.body;
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
+  const baseUrl = getBaseUrl(req);
 
   if (!label) {
     return res.status(400).json({ error: 'Identificação da mesa (ex: "Mesa 09") é obrigatória' });
@@ -211,7 +223,7 @@ router.put('/tables/:id', async (req: Request, res: Response) => {
       },
     });
 
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
+    const baseUrl = getBaseUrl(req);
     return res.json({
       success: true,
       table: {
