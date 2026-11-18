@@ -1,0 +1,31 @@
+{
+  "name": "tappo-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "tappo - Plataforma SaaS B2B2C multi-tenant de cardápio digital e autoatendimento via NFC",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspaces",
+    "heroku-postbuild": "cd apps/api && npx prisma generate && npm run build && cd ../web && npm run build",
+    "start": "node apps/api/dist/server.js",
+    "db:migrate": "npm run db:migrate --workspace=apps/api",
+    "db:seed": "npm run db:seed --workspace=apps/api",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "keywords": [
+    "nfc",
+    "saas",
+    "restaurant",
+    "digital-menu",
+    "multi-tenant",
+    "socketio"
+  ],
+  "author": "tappo team",
+  "license": "UNLICENSED"
+}
