@@ -15,7 +15,17 @@ function generateSafeToken(length = 6): string {
 }
 
 async function main() {
-  console.log('🌱 Iniciando seed da plataforma tappo (Padrão iFood / Trattoria Ribeiro)...');
+  console.log('🌱 Verificando inicialização da plataforma tappo...');
+
+  const tenantCount = await prisma.tenant.count();
+  const forceSeed = process.env.FORCE_SEED === 'true';
+
+  if (tenantCount > 0 && !forceSeed) {
+    console.log('✅ Banco de dados já possui dados semeados. Mantendo dados persistidos.');
+    return;
+  }
+
+  console.log('🌱 Executando seed inicial (Padrão iFood / Trattoria Ribeiro)...');
 
   // Limpeza
   await prisma.orderItem.deleteMany();
